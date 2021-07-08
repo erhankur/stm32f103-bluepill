@@ -1,9 +1,7 @@
 # add the sources here
 set(sources
-    src/system_stm32f10x.c
-    src/startup_stm32f10x_md.s
-    src/stm32f10x_it.c
     src/main.c
+    src/stm32f10x_it.c
 )
 
 # GCC optimization level: use -O0 in debug build, otherwise -O2
@@ -26,7 +24,7 @@ add_executable(${elf_file} ${sources})
 target_include_directories(${elf_file} PUBLIC inc)
 
 # link libraries to project
-target_link_libraries(${elf_file} PUBLIC stm32f10x)
+target_link_libraries(${elf_file} PUBLIC stm32f10x core)
 
 # set additional for compiler and linker: optimization and generate map file
 set(additional_compiler_flags ${opt_level})
@@ -39,6 +37,11 @@ target_link_libraries(${elf_file} PUBLIC "-g -Wl,--gc-sections")
 
 # link with linker file
 target_link_libraries(${elf_file} PUBLIC -T${LINKER_SCRIPT})
+
+target_link_options(${elf_file} PRIVATE
+  LINKER:--print-memory-usage
+  LINKER:-Map,${CMAKE_CURRENT_BINARY_DIR}/${elf_file}.map
+)
 
 # show size of resulting firmware image
 add_custom_target(${elf_file}-size DEPENDS ${elf_file} COMMAND ${ARM_SIZE_EXECUTABLE} -B ${elf_file})

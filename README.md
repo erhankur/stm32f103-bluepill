@@ -12,11 +12,11 @@ As an addition;
 cd build
 make  
 ```
-### Download binary 
+### Download binary
 ```
 make flash  # this will run openocd if it is found during cmake process
 ```
-### Serial terminal 
+### Serial terminal  
 ```
 make monitor # this will run picocom with 115200 8N1 
 ```
@@ -24,7 +24,7 @@ Of course you can run all commands in one shot
 
 `make flash monitor`
 
-### Debug
+### Debug
 ```
 make gdb # this will run gdb and openocd in the background.
 

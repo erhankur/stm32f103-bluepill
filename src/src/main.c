@@ -21,11 +21,8 @@ static void led_init(void)
     GPIO_Init(GPIOC, &gpio_out);
 }
 
-static void cpu_init(void)
+static void clock_init(void)
 {
-    /* Enable CYCCNT in DWT_CTRL */
-    DWT->CTRL |= (1 << 0);
-
     /* Reset the RCC clock configuration to the default reset state. */
     /* HSI ON, PLL OFF, HSE OFF, system clock = 72 MHz, cpu_clock = 72 MHz */
     RCC_DeInit();
@@ -48,13 +45,14 @@ static void delay_us(int32_t us)
 void delay_ms(uint32_t ms)
 {
     uint32_t end_tick = s_tick_count + ms;
-    while (s_tick_count < end_tick)
-        ;
+    while (s_tick_count < end_tick) {
+        __WFE();
+    }
 }
 
 int main(void)
 {
-    cpu_init();
+    clock_init();
     led_init();
 
     while (1) {

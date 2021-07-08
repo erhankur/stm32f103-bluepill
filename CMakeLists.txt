@@ -47,7 +47,7 @@ get_filename_component(LINKER_SCRIPT linker/stm32f103c8.ld ABSOLUTE)
 get_filename_component(OPENOCD_CONFIG tools/stm32f103c8-jlink.cfg ABSOLUTE)
 
 # add libraries
-add_subdirectory(lib-hal)
+add_subdirectory(STM32F1)
 add_subdirectory(ThirdParty)
 
 # add main project
