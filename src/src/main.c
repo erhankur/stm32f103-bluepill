@@ -1,14 +1,9 @@
 #include <stdlib.h>
 #include "stm32f10x.h"
-
-static volatile uint32_t s_tick_count = 0;
+#include "freertos/FreeRTOS.h"
+#include "freertos/task.h"
 
 #define LED_PIN         GPIO_Pin_13
-
-void SysTick_Handler(void)
-{
-    s_tick_count++;
-}
 
 static void led_init(void)
 {
@@ -27,38 +22,30 @@ static void clock_init(void)
     /* HSI ON, PLL OFF, HSE OFF, system clock = 72 MHz, cpu_clock = 72 MHz */
     RCC_DeInit();
     SystemCoreClockUpdate();  /* BluePill board runs at 72 MHz */
-
-    if (SysTick_Config(SystemCoreClock / 1000)) {
-        /* Capture error */
-        while (1);
-    }
 }
 
-static void delay_us(int32_t us)
+static void led_task(void *params)
 {
-    // Each loop takes very roughly one microsecond on a Blue Pill.
-    volatile int32_t count = us;
-    for (; count > 0; --count)
-        ;
-}
+    (void)(params);
 
-void delay_ms(uint32_t ms)
-{
-    uint32_t end_tick = s_tick_count + ms;
-    while (s_tick_count < end_tick) {
-        __WFE();
+    led_init();
+
+    while (pdTRUE) {
+        GPIO_SetBits(GPIOC, LED_PIN);
+        vTaskDelay(pdMS_TO_TICKS(500));
+        GPIO_ResetBits(GPIOC, LED_PIN);
+        vTaskDelay(pdMS_TO_TICKS(500));
     }
 }
 
 int main(void)
 {
     clock_init();
-    led_init();
 
-    while (1) {
-        GPIO_WriteBit(GPIOC, GPIO_Pin_13, Bit_RESET);
-        delay_ms(250);
-        GPIO_WriteBit(GPIOC, GPIO_Pin_13, Bit_SET);
-        delay_us(500000);
-    }
+    xTaskCreate(led_task, "led_task", 512, NULL, 1, NULL);
+
+    vTaskStartScheduler();
+
+    while (pdTRUE)
+        ;
 }

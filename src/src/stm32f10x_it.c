@@ -82,15 +82,6 @@ void UsageFault_Handler(void)
 }
 
 /**
- * @brief  This function handles SVCall exception.
- * @param  None
- * @retval None
- */
-void SVC_Handler(void)
-{
-}
-
-/**
  * @brief  This function handles Debug Moniusb-joystick-gesturestor exception.
  * @param  None
  * @retval None
@@ -98,14 +89,4 @@ void SVC_Handler(void)
 void DebugMon_Handler(void)
 {
 }
-
-/**
- * @brief  This function handles PendSV_Handler exception.
- * @param  None
- * @retval None
- */
-void PendSV_Handler(void)
-{
-}
-
 

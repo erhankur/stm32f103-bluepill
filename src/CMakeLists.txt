@@ -25,6 +25,7 @@ target_include_directories(${elf_file} PUBLIC inc)
 
 # link libraries to project
 target_link_libraries(${elf_file} PUBLIC stm32f10x core)
+target_link_libraries(${elf_file} PUBLIC freertos)
 
 # set additional for compiler and linker: optimization and generate map file
 set(additional_compiler_flags ${opt_level})
