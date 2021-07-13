@@ -1,7 +1,7 @@
 # add the sources here
 set(sources
     src/main.c
-    src/stm32f10x_it.c
+    src/system.c
 )
 
 # GCC optimization level: use -O0 in debug build, otherwise -O2
