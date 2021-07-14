@@ -2,6 +2,7 @@
 set(sources
     src/main.c
     src/system.c
+    src/io.c
 )
 
 # GCC optimization level: use -O0 in debug build, otherwise -O2
