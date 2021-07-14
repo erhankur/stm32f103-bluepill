@@ -1,80 +1,183 @@
+#include <stdio.h>
+#include <stdlib.h>
 #include <stdint.h>
 
-#define PERIPH_BASE           ((uint32_t)0x40000000) /*!< Peripheral base address in the alias region */
-#define APB1PERIPH_BASE       PERIPH_BASE
-#define APB2PERIPH_BASE       (PERIPH_BASE + 0x10000)
-#define AHBPERIPH_BASE        (PERIPH_BASE + 0x20000)
+typedef struct _task_t {
+    int idx;
+    void (*fnc)(void);
+    struct _task_t *prev;
+    struct _task_t *next;
+} task_t;
 
-#define RCC_BASE              (AHBPERIPH_BASE + 0x1000)
-#define GPIOC_BASE            (APB2PERIPH_BASE + 0x1000)
+task_t *_pTask = NULL;
+int _nTask = 0;
 
-#define IOP_LED_PORT          GPIOC
-#define IOP_LED_PIN           13
-
-#define __IO    volatile       /*!< Defines 'read / write' permissions */
-
-typedef struct {
-    __IO uint32_t CR;
-    __IO uint32_t CFGR;
-    __IO uint32_t CIR;
-    __IO uint32_t APB2RSTR;
-    __IO uint32_t APB1RSTR;
-    __IO uint32_t AHBENR;
-    __IO uint32_t APB2ENR;
-    __IO uint32_t APB1ENR;
-    __IO uint32_t BDCR;
-    __IO uint32_t CSR;
-} RCC_TypeDef;
-
-typedef struct {
-    __IO uint32_t CRL;
-    __IO uint32_t CRH;
-    __IO uint32_t IDR;
-    __IO uint32_t ODR;
-    __IO uint32_t BSRR;
-    __IO uint32_t BRR;
-    __IO uint32_t LCKR;
-} GPIO_TypeDef;
-
-#define RCC_APB2ENR_IOPCEN      ((uint32_t)0x00000010)         /*!< I/O port C clock enable */
-#define GPIOC                   ((GPIO_TypeDef *)GPIOC_BASE)
-#define RCC                     ((RCC_TypeDef *)RCC_BASE)
-
-void Delay(void)
+void Task_Add(void (*fx)(void))
 {
-    volatile int i = 0;
-    for (i = 0; i < 1000000; i++)
-        ;
+    task_t *p;
+    
+    if (_pTask == NULL) {
+        _pTask = malloc(sizeof(task_t));
+        _pTask->fnc = fx;
+        _pTask->prev = _pTask;
+        _pTask->next = _pTask;
+        _pTask->idx = _nTask++;
+    }
+    else {
+        p = _pTask->prev;
+        
+        _pTask->prev = malloc(sizeof(task_t));
+        _pTask->prev->fnc = fx;
+        _pTask->prev->prev = p;
+        _pTask->prev->next = _pTask;
+        _pTask->prev->idx = _nTask++;
+        
+        _pTask->prev->prev->next = _pTask->prev;
+    }
+}
+
+void Task_Delete(task_t *pTask)
+{
+    if (pTask != NULL) {
+        (pTask->prev)->next = pTask->next;
+        (pTask->next)->prev = pTask->prev;
+        free(pTask);
+        
+        pTask = NULL;
+        --_nTask;
+    }
+}
+
+void Task_MoveToHead(int iTask)
+{
+    int i;
+    task_t *p;
+    
+    if (_pTask == NULL)
+        return;
+  
+    p = _pTask;
+    for (i = 0; i < _nTask; ++i) {
+        if (p->idx == iTask)
+        break;
+        p = p->next;
+    }
+    
+    if (i < _nTask) {
+        p->prev->next = p->next;
+        p->next->prev = p->prev;
+        
+        p->prev = _pTask;
+        p->next = _pTask->next;
+        _pTask->next = p;
+    }
+}
+
+void ISR_F(void)
+{
+    //...
+    Task_MoveToHead(5);
+}
+
+void init(void)
+{
+}
+
+void Task_A(void)
+{
+    static int i;
+    
+    ++i;
+}
+
+void Task_B(void)
+{
+    static int i;
+
+    if (i == 1)
+        ISR_F();
+
+    ++i;
+}
+
+void Task_C(void)
+{
+    static int i;
+
+    ++i;
+}
+
+void Task_D(void)
+{
+    static int i;
+
+    ++i;
+}
+
+void Task_E(void)
+{
+    static int i;
+
+    ++i;
+}
+
+void Task_F(void)
+{
+    static int i;
+
+    ++i;
+}
+
+void Task_G(void)
+{
+    static int i;
+
+    ++i;
+}
+
+void Task_H(void)
+{
+    static int i;
+
+    ++i;
+}
+
+int main_()
+{
+    init();
+  
+    while (1) {
+        Task_A();
+        Task_B();
+        Task_C();
+        Task_D();
+        Task_E();
+        Task_F();
+        Task_G();
+        Task_H();
+    }
+  
+    //return 0;
 }
 
 int main()
 {
-    int bitOffset;
-
-    RCC->APB2ENR |= RCC_APB2ENR_IOPCEN;   // GPIOC clock enable
-
-    if (IOP_LED_PIN < 8) {
-        bitOffset = (IOP_LED_PIN - 8) * 4;  // GPIOC->CRH register'inda C13'e karsilik gelen bit konumu
-        GPIOC->CRL &= ~(0xF << bitOffset);
-        GPIOC->CRL |= (3 << bitOffset);
-    } else {
-        bitOffset = (IOP_LED_PIN - 8) * 4;
-        GPIOC->CRH &= ~(0xF << bitOffset);   // GPIOC->CRH<23:20> &= 0000       ..000111100... 11110000111
-        GPIOC->CRH |= (3 << bitOffset);      // GPIOC->CRH<23:20> |= 0011      // *(uint32_t *)0x40011004 = ...
+    init();
+  
+    Task_Add(&Task_A);
+    Task_Add(&Task_B);
+    Task_Add(&Task_C);
+    Task_Add(&Task_D);
+    Task_Add(&Task_E);
+    Task_Add(&Task_F);
+    Task_Add(&Task_G);
+    Task_Add(&Task_H);
+  
+    while (1)
+    {
+        _pTask->fnc();
+        _pTask = _pTask->next;
     }
-
-    GPIOC->ODR |= (1 << IOP_LED_PIN);
-    GPIOC->ODR &= ~(1 << IOP_LED_PIN);
-    GPIOC->ODR |= (1 << IOP_LED_PIN);
-    GPIOC->ODR &= ~(1 << IOP_LED_PIN);
-
-    GPIOC->BSRR = (1 << (IOP_LED_PIN + 16));    // DR<13> = 1
-    GPIOC->BSRR = (1 << IOP_LED_PIN);           // DR<13> = 1
-    GPIOC->BRR = (1 << IOP_LED_PIN);            // DR<13> = 1
-    GPIOC->BSRR = (1 << IOP_LED_PIN);           // DR<13> = 1
-
-    while (1) {
-        GPIOC->ODR ^= (1 << IOP_LED_PIN);
-        Delay();
-    }
+  
+    //return 0;
 }
