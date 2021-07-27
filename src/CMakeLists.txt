@@ -1,5 +1,6 @@
 # add the sources here
 set(sources
+    src/stm32f10x_it.c
     src/main.c
     src/system.c
     src/io.c
@@ -25,7 +26,7 @@ add_executable(${elf_file} ${sources})
 target_include_directories(${elf_file} PUBLIC inc)
 
 # link libraries to project
-target_link_libraries(${elf_file} PUBLIC stm32f10x core)
+target_link_libraries(${elf_file} PUBLIC core stm32f10x)
 
 # set additional for compiler and linker: optimization and generate map file
 set(additional_compiler_flags ${opt_level})

@@ -13,36 +13,40 @@ void init(void)
     io_init(IO_PIN_LED, IO_MODE_OUTPUT);
 }
 
-void task_a(void)
+void task_led(void)
 {
+    static enum {
+        STATE_LED_OFF,
+        STATE_LED_ON
+    } state = STATE_LED_OFF; 
 
-}
+    static tick_type_t t0 = 0;
+    tick_type_t t1 = sys_get_tick_count();
 
-void task_b(void)
-{
-
-}
-
-void task_c(void)
-{
+    switch (state) {
+        case STATE_LED_OFF: 
+            if (t1 >= t0 + 9 * CLOCK_PER_SECOND / 10) {
+                t0 = t1;
+                state = STATE_LED_ON;
+                io_write(IO_PIN_LED, IO_PIN_LED_ON);
+            }
+            break;
+        case STATE_LED_ON:
+            if (t1 >= t0 + 1 * CLOCK_PER_SECOND / 10) {
+                t0 = t1;
+                state = STATE_LED_OFF;
+                io_write(IO_PIN_LED, IO_PIN_LED_OFF);
+            }
+            break;
+    }
 
 }
 
 int main()
 {
     init();
-    
-    io_write(IO_PIN_LED, 0);
-
-    io_init(IO_PIN_TEST_OUT, IO_MODE_OUTPUT);
-    io_write(IO_PIN_TEST_OUT, 1);
-
-    io_init(IO_PIN_TEST_IN, IO_MODE_INPUT);
-    io_read(IO_PIN_TEST_IN);
 
     while (1) {
-        task_a();
-        task_b();
-        task_c();
+        task_led();
     }
 }

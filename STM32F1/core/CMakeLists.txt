@@ -1,7 +1,6 @@
 set(sources
     src/system_stm32f10x.c
     src/startup_stm32f10x_md.s
-    src/stm32f10x_it.c
 )
 
 add_library(core ${sources})

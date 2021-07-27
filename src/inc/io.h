@@ -29,6 +29,9 @@ typedef struct {
     int pin;
 } io_pin_t;
 
+#define IO_PIN_LED_ON       0
+#define IO_PIN_LED_OFF      1
+
 enum {
     IO_PIN_LED,
     IO_PIN_TEST_OUT,

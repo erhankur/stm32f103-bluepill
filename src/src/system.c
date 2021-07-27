@@ -29,7 +29,15 @@ tick_type_t sys_get_tick_count(void)
 
 void sys_tick_init(void)
 {
-    SysTick_Config(SystemCoreClock / CLOCK_PER_SECOND);
+    /* Reset the RCC clock configuration to the default reset state. */
+    /* HSI ON, PLL OFF, HSE OFF, system clock = 72 MHz, cpu_clock = 72 MHz */
+    RCC_DeInit();
+    SystemCoreClockUpdate();  /* BluePill board runs at 72 MHz */
+
+    if (SysTick_Config(SystemCoreClock / CLOCK_PER_SECOND)) {
+        /* Capture error */
+        while (1);
+    }
 }
 
 void sys_io_init(void)
