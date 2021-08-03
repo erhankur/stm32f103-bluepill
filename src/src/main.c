@@ -3,6 +3,7 @@
 
 #include "system.h"
 #include "io.h"
+#include "lcd.h"
 
 void init(void)
 {
@@ -11,6 +12,7 @@ void init(void)
 
     io_write(IO_PIN_LED, 1);
     io_init(IO_PIN_LED, IO_MODE_OUTPUT);
+    lcd_init();
 }
 
 void task_led(void)
@@ -53,6 +55,18 @@ void task_led(void)
 int main()
 {
     init();
+
+    lcd_send_char('H');
+    lcd_send_char('E');
+    lcd_send_char('L');
+    lcd_send_char('L');
+    lcd_send_char('O');
+    lcd_set_cursor(0x40);
+    lcd_send_char('W');
+    lcd_send_char('O');
+    lcd_send_char('R');
+    lcd_send_char('L');
+    lcd_send_char('D');
 
     while (1) {
         task_led();

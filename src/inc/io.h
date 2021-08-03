@@ -34,8 +34,14 @@ typedef struct {
 
 enum {
     IO_PIN_LED,
-    IO_PIN_TEST_OUT,
-    IO_PIN_TEST_IN,
+
+    /* LCD Module */
+    IO_PIN_LCD_RS,
+    IO_PIN_LCD_E,
+    IO_PIN_LCD_D7,
+    IO_PIN_LCD_D6,
+    IO_PIN_LCD_D5,
+    IO_PIN_LCD_D4,
 
     IO_PIN_MAX
 };
@@ -54,8 +60,14 @@ GPIO_TypeDef *gpio_ports[] = {
 
 io_pin_t io_pins[IO_PIN_MAX] = {
     {.port = IO_PORT_C, .pin = 13}, 
+
+    /* LCD Module */
+    {.port = IO_PORT_B, .pin = 9}, 
+    {.port = IO_PORT_B, .pin = 8}, 
+    {.port = IO_PORT_B, .pin = 7}, 
+    {.port = IO_PORT_B, .pin = 6}, 
     {.port = IO_PORT_B, .pin = 5}, 
-    {.port = IO_PORT_A, .pin = 3}, 
+    {.port = IO_PORT_B, .pin = 4}, 
 };
 #endif
 
