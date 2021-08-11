@@ -18,14 +18,14 @@ static void lcd_send_nibble(uint8_t ch)
     delay_us(100);
 }
 
-void lcd_send_cmd(uint8_t cmd)
+static void lcd_send_cmd(uint8_t cmd)
 {
     io_write(IO_PIN_LCD_RS, 0);
     lcd_send_nibble(cmd >> 4);
     lcd_send_nibble(cmd);
 }
 
-void lcd_send_char(uint8_t ch)
+static void lcd_send_char(uint8_t ch)
 {
     io_write(IO_PIN_LCD_RS, 1);
     lcd_send_nibble(ch >> 4);
@@ -40,12 +40,22 @@ void lcd_clear(void)
 
 void lcd_display_mode(uint8_t mode)
 {
-    lcd_send_cmd(0x08 | mode); 
+    lcd_send_cmd(0x08 | mode);
 }
 
 void lcd_set_cursor(uint8_t pos)
 {
-    lcd_send_cmd(0x80 | pos); 
+    lcd_send_cmd(0x80 | pos);
+}
+
+void lcd_put_char(char ch)
+{
+    switch (ch) {
+    case '\r': lcd_set_cursor(0); break;
+    case '\n': lcd_set_cursor(0x40); break;
+    case '\f': lcd_clear(); break;
+    default: lcd_send_char(ch); break;
+    }
 }
 
 void lcd_init(void)
@@ -68,6 +78,8 @@ void lcd_init(void)
     lcd_send_cmd(0x28); /* 2 lines small font */
     lcd_display_mode(LCD_MODE_OFF);
     lcd_clear();
-    lcd_send_cmd(0x06);
-    lcd_display_mode(LCD_MODE_ON | LCD_MODE_BLINK);
+    lcd_send_cmd(0x06);  /* I/D=1 (increase) S=0 */
+    lcd_display_mode(LCD_MODE_ON);
+
+    delay_ms(5);
 }

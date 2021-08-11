@@ -8,6 +8,7 @@ typedef uint32_t tick_type_t;
 tick_type_t sys_get_tick_count(void);
 void sys_tick_init(void);
 void sys_io_init(void);
+void sys_console_init(void);
 
 #define CLOCK_FREQ          72000000
 #define CLOCK_PER_SECOND    1000

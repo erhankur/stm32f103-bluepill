@@ -12,7 +12,7 @@ void init(void)
 
     io_write(IO_PIN_LED, 1);
     io_init(IO_PIN_LED, IO_MODE_OUTPUT);
-    lcd_init();
+    sys_console_init();
 }
 
 void task_led(void)
@@ -22,53 +22,52 @@ void task_led(void)
         STATE_LED_OFF,
         INIT_LED_ON,
         STATE_LED_ON
-    } state = INIT_LED_OFF; 
+    } state = INIT_LED_OFF;
 
     static tick_type_t t0 = 0;
     tick_type_t t1 = sys_get_tick_count();
 
     switch (state) {
-        case STATE_LED_OFF: 
-            if (t1 < t0 + 9 * CLOCK_PER_SECOND / 10)
-                break;
-            state = INIT_LED_ON;
-            /* fallthrough */
-        case INIT_LED_ON:
-            t0 = t1;
-            io_write(IO_PIN_LED, IO_PIN_LED_ON);
-            state = STATE_LED_ON;
+    case STATE_LED_OFF:
+        if (t1 < t0 + 9 * CLOCK_PER_SECOND / 10) {
             break;
-        case STATE_LED_ON:
-            if (t1 < t0 + 1 * CLOCK_PER_SECOND / 10) {
-                break;
-            }
-            state = INIT_LED_OFF;
-            /* fallthrough */
-        case INIT_LED_OFF:
-            t0 = t1;
-            io_write(IO_PIN_LED, IO_PIN_LED_OFF);
-            state = STATE_LED_OFF;
+        }
+        state = INIT_LED_ON;
+    /* fallthrough */
+    case INIT_LED_ON:
+        t0 = t1;
+        io_write(IO_PIN_LED, IO_PIN_LED_ON);
+        state = STATE_LED_ON;
+        break;
+    case STATE_LED_ON:
+        if (t1 < t0 + 1 * CLOCK_PER_SECOND / 10) {
             break;
+        }
+        state = INIT_LED_OFF;
+    /* fallthrough */
+    case INIT_LED_OFF:
+        t0 = t1;
+        io_write(IO_PIN_LED, IO_PIN_LED_OFF);
+        state = STATE_LED_OFF;
+        break;
     }
+}
+
+void task_print(void)
+{
+    static uint32_t count = 0;
+
+    printf("\nCNT:%10lu", ++count);
 }
 
 int main()
 {
     init();
 
-    lcd_send_char('H');
-    lcd_send_char('E');
-    lcd_send_char('L');
-    lcd_send_char('L');
-    lcd_send_char('O');
-    lcd_set_cursor(0x40);
-    lcd_send_char('W');
-    lcd_send_char('O');
-    lcd_send_char('R');
-    lcd_send_char('L');
-    lcd_send_char('D');
+    printf("\rHello World!\nThis is ARM-CM3");
 
     while (1) {
         task_led();
+        task_print();
     }
 }

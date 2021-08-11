@@ -1,7 +1,9 @@
+#include <stdio.h>
 #include <stdint.h>
 #include "system.h"
 
 #include "stm32f10x.h"
+#include "lcd.h"
 
 static volatile tick_type_t s_ticks;
 
@@ -24,7 +26,7 @@ void sys_tick_handler(void)
 
 tick_type_t sys_get_tick_count(void)
 {
-    return s_ticks; 
+    return s_ticks;
 }
 
 void sys_tick_init(void)
@@ -46,10 +48,19 @@ void sys_io_init(void)
         RCC_APB2PeriphClockCmd(s_gpio_clocks[i], ENABLE);
     }
 
-    RCC_APB2PeriphClockCmd(RCC_APB2Periph_AFIO, ENABLE);    
+    RCC_APB2PeriphClockCmd(RCC_APB2Periph_AFIO, ENABLE);
     GPIO_PinRemapConfig(GPIO_Remap_SWJ_JTAGDisable, ENABLE);
 }
 
+void sys_console_init(void)
+{
+    lcd_init();
+
+    // Turn off buffers, so I/O occurs immediately
+    setvbuf(stdin, NULL, _IONBF, 0);
+    setvbuf(stdout, NULL, _IONBF, 0);
+    setvbuf(stderr, NULL, _IONBF, 0);
+}
 
 
 

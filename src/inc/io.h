@@ -59,15 +59,15 @@ GPIO_TypeDef *gpio_ports[] = {
 };
 
 io_pin_t io_pins[IO_PIN_MAX] = {
-    {.port = IO_PORT_C, .pin = 13}, 
+    {.port = IO_PORT_C, .pin = 13},
 
     /* LCD Module */
-    {.port = IO_PORT_B, .pin = 9}, 
-    {.port = IO_PORT_B, .pin = 8}, 
-    {.port = IO_PORT_B, .pin = 7}, 
-    {.port = IO_PORT_B, .pin = 6}, 
-    {.port = IO_PORT_B, .pin = 5}, 
-    {.port = IO_PORT_B, .pin = 4}, 
+    {.port = IO_PORT_B, .pin = 9},
+    {.port = IO_PORT_B, .pin = 8},
+    {.port = IO_PORT_B, .pin = 7},
+    {.port = IO_PORT_B, .pin = 6},
+    {.port = IO_PORT_B, .pin = 5},
+    {.port = IO_PORT_B, .pin = 4},
 };
 #endif
 
