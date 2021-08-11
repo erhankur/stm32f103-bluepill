@@ -7,6 +7,7 @@ set(sources
     src/delay.s
     src/lcd.c
     src/syscalls.c
+    src/uart.c
 )
 
 # GCC optimization level: use -O0 in debug build, otherwise -O2

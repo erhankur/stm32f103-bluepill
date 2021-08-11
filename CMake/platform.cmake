@@ -2,7 +2,7 @@ message("-- Cmake running on platform: " ${CMAKE_HOST_SYSTEM_NAME})
 
 if(${CMAKE_HOST_SYSTEM_NAME} STREQUAL "Darwin")
     # for MacOS X or iOS, watchOS, tvOS (since 3.10.3)
-    set(UART_PORT "/dev/tty.usbserial")
+    set(UART_PORT "/dev/tty.usbserial-A503PXBK")
 elseif(${CMAKE_HOST_SYSTEM_NAME} STREQUAL "Linux")
     # for Linux, BSD, Solaris, Minix
     set(UART_PORT "/dev/ttyUSB0")

@@ -12,6 +12,6 @@ void lcd_init(void);
 void lcd_display_mode(uint8_t mode);
 void lcd_clear(void);
 void lcd_set_cursor(uint8_t pos);
-void lcd_put_char(char ch);
+void lcd_putch(char ch);
 
 #endif

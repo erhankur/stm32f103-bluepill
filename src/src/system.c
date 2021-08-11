@@ -4,6 +4,7 @@
 
 #include "stm32f10x.h"
 #include "lcd.h"
+#include "uart.h"
 
 static volatile tick_type_t s_ticks;
 
@@ -18,6 +19,8 @@ static volatile int s_gpio_clocks[] = {
 };
 
 #define N_PORTS (sizeof(s_gpio_clocks)  / sizeof(s_gpio_clocks[0]))
+
+extern int g_console_uart;
 
 void sys_tick_handler(void)
 {
@@ -54,7 +57,8 @@ void sys_io_init(void)
 
 void sys_console_init(void)
 {
-    lcd_init();
+    //lcd_init();
+    uart_init(g_console_uart, 115200);
 
     // Turn off buffers, so I/O occurs immediately
     setvbuf(stdin, NULL, _IONBF, 0);

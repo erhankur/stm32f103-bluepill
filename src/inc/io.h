@@ -43,6 +43,14 @@ enum {
     IO_PIN_LCD_D5,
     IO_PIN_LCD_D4,
 
+    /* UART pins */
+    IO_PIN_UART1_RX,
+    IO_PIN_UART1_TX,
+    IO_PIN_UART2_RX,
+    IO_PIN_UART2_TX,
+    IO_PIN_UART3_RX,
+    IO_PIN_UART3_TX,
+
     IO_PIN_MAX
 };
 
@@ -68,6 +76,14 @@ io_pin_t io_pins[IO_PIN_MAX] = {
     {.port = IO_PORT_B, .pin = 6},
     {.port = IO_PORT_B, .pin = 5},
     {.port = IO_PORT_B, .pin = 4},
+
+    /* UART pins */
+    {.port = IO_PORT_A, .pin = 10},
+    {.port = IO_PORT_A, .pin = 9},
+    {.port = IO_PORT_A, .pin = 3},
+    {.port = IO_PORT_A, .pin = 2},
+    {.port = IO_PORT_B, .pin = 11},
+    {.port = IO_PORT_B, .pin = 10},
 };
 #endif
 

@@ -48,7 +48,7 @@ void lcd_set_cursor(uint8_t pos)
     lcd_send_cmd(0x80 | pos);
 }
 
-void lcd_put_char(char ch)
+void lcd_putch(char ch)
 {
     switch (ch) {
     case '\r': lcd_set_cursor(0); break;
