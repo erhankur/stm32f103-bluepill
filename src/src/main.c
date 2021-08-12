@@ -4,6 +4,7 @@
 #include "system.h"
 #include "io.h"
 #include "lcd.h"
+#include "uart.h"
 
 void init(void)
 {
@@ -60,6 +61,13 @@ void task_print(void)
     printf("\nCNT:%10lu", ++count);
 }
 
+void task_echo(void)
+{
+    if (uart_data_ready(g_console_uart)) {
+        uart_send(g_console_uart,uart_recv(g_console_uart));
+    }
+}
+
 int main()
 {
     init();
@@ -68,6 +76,7 @@ int main()
 
     while (1) {
         task_led();
-        task_print();
+        //task_print();
+        task_echo();
     }
 }

@@ -20,8 +20,6 @@ static volatile int s_gpio_clocks[] = {
 
 #define N_PORTS (sizeof(s_gpio_clocks)  / sizeof(s_gpio_clocks[0]))
 
-extern int g_console_uart;
-
 void sys_tick_handler(void)
 {
     ++s_ticks;

@@ -5,7 +5,6 @@
 #include "io.h"
 #include "uart.h"
 
-#include "stm32f10x.h"
 #include "stm32f10x_usart.h"
 
 int g_console_uart = UART_1;
@@ -25,7 +24,7 @@ static struct uart_config s_uart_config[] = {
 
 void uart_init(int idx, int baud)
 {
-	USART_InitTypeDef uInit;
+	USART_InitTypeDef usart_init;
 
 	io_init(s_uart_config[idx].io_tx, IO_MODE_ALTERNATE);
 	io_init(s_uart_config[idx].io_rx, IO_MODE_INPUT);
@@ -35,14 +34,14 @@ void uart_init(int idx, int baud)
 	else
 		RCC_APB1PeriphClockCmd(s_uart_config[idx].clock_source, ENABLE);
 
-	uInit.USART_BaudRate = baud;
-	uInit.USART_HardwareFlowControl = USART_HardwareFlowControl_None;
-	uInit.USART_Mode = USART_Mode_Rx | USART_Mode_Tx;
-	uInit.USART_Parity = USART_Parity_No;
-	uInit.USART_StopBits = USART_StopBits_1;
-	uInit.USART_WordLength = USART_WordLength_8b;
+	usart_init.USART_BaudRate = baud;
+	usart_init.USART_HardwareFlowControl = USART_HardwareFlowControl_None;
+	usart_init.USART_Mode = USART_Mode_Rx | USART_Mode_Tx;
+	usart_init.USART_Parity = USART_Parity_No;
+	usart_init.USART_StopBits = USART_StopBits_1;
+	usart_init.USART_WordLength = USART_WordLength_8b;
 
-	USART_Init(s_uart_config[idx].usart, &uInit);
+	USART_Init(s_uart_config[idx].usart, &usart_init);
 	USART_Cmd(s_uart_config[idx].usart, ENABLE);
 }
 
@@ -64,4 +63,16 @@ void uart_putch(unsigned char c)
 		uart_send(g_console_uart, '\r');
 
 	uart_send(g_console_uart, c);
+}
+
+int uart_data_ready(int idx)
+{
+    return USART_GetFlagStatus(s_uart_config[idx].usart, USART_FLAG_RXNE);
+}
+
+unsigned char uart_recv(int idx)
+{
+    while (!uart_data_ready(idx)) {}
+
+    return (unsigned char)USART_ReceiveData(s_uart_config[idx].usart);
 }
