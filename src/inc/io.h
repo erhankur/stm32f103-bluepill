@@ -51,6 +51,11 @@ enum {
     IO_PIN_UART3_RX,
     IO_PIN_UART3_TX,
 
+    /* Push buttons */
+    IO_PIN_BUTTON_SET,
+    IO_PIN_BUTTON_UP,
+    IO_PIN_BUTTON_DOWN,
+
     IO_PIN_MAX
 };
 
@@ -84,6 +89,11 @@ io_pin_t io_pins[IO_PIN_MAX] = {
     {.port = IO_PORT_A, .pin = 2},
     {.port = IO_PORT_B, .pin = 11},
     {.port = IO_PORT_B, .pin = 10},
+
+    /* Push buttons */
+    {.port = IO_PORT_A, .pin = 0},
+    {.port = IO_PORT_A, .pin = 1},
+    {.port = IO_PORT_A, .pin = 2},
 };
 #endif
 

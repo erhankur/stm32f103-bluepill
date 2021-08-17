@@ -5,6 +5,7 @@
 #include "io.h"
 #include "lcd.h"
 #include "uart.h"
+#include "button.h"
 
 void init(void)
 {
@@ -14,6 +15,7 @@ void init(void)
     io_write(IO_PIN_LED, 1);
     io_init(IO_PIN_LED, IO_MODE_OUTPUT);
     sys_console_init();
+    button_init();
 }
 
 void task_led(void)
@@ -68,6 +70,25 @@ void task_echo(void)
     }
 }
 
+void task_button(void)
+{
+    if (g_buttons[BUTTON_SET]) {
+        static uint32_t cnt = 0;
+        printf("BUTTON_SET pressed %ld times\n", ++cnt);
+        g_buttons[BUTTON_SET] = 0;
+    }
+    if (g_buttons[BUTTON_UP]) {
+        static uint32_t cnt = 0;
+        printf("BUTTON_UP pressed %ld times\n", ++cnt);
+        g_buttons[BUTTON_UP] = 0;
+    }
+    if (g_buttons[BUTTON_DOWN]) {
+        static uint32_t cnt = 0;
+        printf("BUTTON_DOWN pressed %ld times\n", ++cnt);
+        g_buttons[BUTTON_DOWN] = 0;
+    }
+}
+
 int main()
 {
     init();
@@ -78,5 +99,6 @@ int main()
         task_led();
         //task_print();
         task_echo();
+        task_button();
     }
 }

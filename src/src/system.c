@@ -5,6 +5,7 @@
 #include "stm32f10x.h"
 #include "lcd.h"
 #include "uart.h"
+#include "button.h"
 
 static volatile tick_type_t s_ticks;
 
@@ -23,6 +24,7 @@ static volatile int s_gpio_clocks[] = {
 void sys_tick_handler(void)
 {
     ++s_ticks;
+    button_scan_all();
 }
 
 tick_type_t sys_get_tick_count(void)
