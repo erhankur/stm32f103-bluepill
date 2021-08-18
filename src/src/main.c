@@ -73,27 +73,49 @@ void task_echo(void)
 void task_button(void)
 {
     if (g_buttons[BUTTON_SET]) {
-        static uint32_t cnt = 0;
-        printf("BUTTON_SET pressed %ld times\n", ++cnt);
-        g_buttons[BUTTON_SET] = 0;
+        static uint16_t cnt = 0;
+        printf("BUTTON_SET pressed %d times\n", ++cnt);
+        //g_buttons[BUTTON_SET] = 0; //binary semaphore
+        g_buttons[BUTTON_SET]--;
     }
     if (g_buttons[BUTTON_UP]) {
-        static uint32_t cnt = 0;
-        printf("BUTTON_UP pressed %ld times\n", ++cnt);
-        g_buttons[BUTTON_UP] = 0;
+        static uint16_t cnt = 0;
+        printf("BUTTON_UP pressed %d times\n", ++cnt);
+        //g_buttons[BUTTON_UP] = 0; //binary semaphore
+        g_buttons[BUTTON_UP]--;
     }
     if (g_buttons[BUTTON_DOWN]) {
-        static uint32_t cnt = 0;
-        printf("BUTTON_DOWN pressed %ld times\n", ++cnt);
-        g_buttons[BUTTON_DOWN] = 0;
+        static uint16_t cnt = 0;
+        printf("BUTTON_DOWN pressed %d times\n", ++cnt);
+        //g_buttons[BUTTON_DOWN] = 0; //binary semaphore
+        g_buttons[BUTTON_DOWN]--;   //counting semaphore
     }
+
+#ifdef BUTTON_LONG_PRESS
+    /* long press check */
+    if (g_buttons_long_press[BUTTON_SET]) {
+        static uint16_t cnt = 0;
+        printf("BUTTON_SET long pressed %d times\n", ++cnt);
+        g_buttons_long_press[BUTTON_SET] = 0; //binary semaphore
+    }
+    if (g_buttons_long_press[BUTTON_UP]) {
+        static uint16_t cnt = 0;
+        printf("BUTTON_UP long pressed %d times\n", ++cnt);
+        g_buttons_long_press[BUTTON_UP] = 0; //binary semaphore
+    }
+    if (g_buttons_long_press[BUTTON_DOWN]) {
+        static uint16_t cnt = 0;
+        printf("BUTTON_DOWN long pressed %d times\n", ++cnt);
+        g_buttons_long_press[BUTTON_DOWN] = 0; //binary semaphore
+    }
+#endif
 }
 
 int main()
 {
     init();
 
-    printf("\rHello World!\nThis is ARM-CM3");
+    printf("\rHello World!\nThis is ARM-CM3\n");
 
     while (1) {
         task_led();
