@@ -32,10 +32,31 @@ typedef struct {
 #define IO_PIN_LED_ON       0
 #define IO_PIN_LED_OFF      1
 
+#define IO_OLED_RES 
+#define IO_OLED_CS 
+
 enum {
     IO_PIN_LED,
-    IO_PIN_TEST_OUT,
-    IO_PIN_TEST_IN,
+
+    /* SPI1 */
+    IO_PIN_SPI_SCK,
+    IO_PIN_SPI_MISO,
+    IO_PIN_SPI_MOSI,
+
+    /* OLED */
+#ifdef IO_OLED_VDD
+    IO_PIN_OLED_VDD,
+#endif
+#ifdef IO_OLED_GND
+    IO_PIN_OLED_GND,
+#endif
+#ifdef IO_OLED_RES
+    IO_PIN_OLED_RES,
+#endif
+#ifdef IO_OLED_CS
+    IO_PIN_OLED_CS,
+#endif
+    IO_PIN_OLED_DC,
 
     IO_PIN_MAX
 };
@@ -54,8 +75,24 @@ GPIO_TypeDef *gpio_ports[] = {
 
 io_pin_t io_pins[IO_PIN_MAX] = {
     {.port = IO_PORT_C, .pin = 13}, 
-    {.port = IO_PORT_B, .pin = 5}, 
-    {.port = IO_PORT_A, .pin = 3}, 
+
+    /* SPI1 */
+    {.port = IO_PORT_A, .pin = 5},  /* SCK */
+    {.port = IO_PORT_A, .pin = 6},  /* MISO */
+    {.port = IO_PORT_A, .pin = 7},  /* MOSI */
+ 
+    /* OLED */
+#ifdef IO_OLED_VDD
+#endif 
+#ifdef IO_OLED_GND
+#endif
+#ifdef IO_OLED_RES
+    {.port = IO_PORT_B, .pin = 0},  /* RES */
+#endif
+#ifdef IO_OLED_CS
+    {.port = IO_PORT_A, .pin = 4},  /* CS */
+#endif 
+    {.port = IO_PORT_B, .pin = 1},  /* DC */
 };
 #endif
 

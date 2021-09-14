@@ -3,6 +3,7 @@
 
 #include "system.h"
 #include "io.h"
+#include "oled.h"
 
 void init(void)
 {
@@ -11,6 +12,7 @@ void init(void)
 
     io_write(IO_PIN_LED, 1);
     io_init(IO_PIN_LED, IO_MODE_OUTPUT);
+    oled_start(0);
 }
 
 void task_led(void)
