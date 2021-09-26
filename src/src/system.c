@@ -24,7 +24,7 @@ void sys_tick_handler(void)
 
 tick_type_t sys_get_tick_count(void)
 {
-    return s_ticks; 
+    return s_ticks;
 }
 
 void sys_tick_init(void)
@@ -46,7 +46,7 @@ void sys_io_init(void)
         RCC_APB2PeriphClockCmd(s_gpio_clocks[i], ENABLE);
     }
 
-    RCC_APB2PeriphClockCmd(RCC_APB2Periph_AFIO, ENABLE);    
+    RCC_APB2PeriphClockCmd(RCC_APB2Periph_AFIO, ENABLE);
     GPIO_PinRemapConfig(GPIO_Remap_SWJ_JTAGDisable, ENABLE);
 }
 

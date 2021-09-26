@@ -22,33 +22,34 @@ void task_led(void)
         STATE_LED_OFF,
         INIT_LED_ON,
         STATE_LED_ON
-    } state = INIT_LED_OFF; 
+    } state = INIT_LED_OFF;
 
     static tick_type_t t0 = 0;
     tick_type_t t1 = sys_get_tick_count();
 
     switch (state) {
-        case STATE_LED_OFF: 
-            if (t1 < t0 + 9 * CLOCK_PER_SECOND / 10)
-                break;
-            state = INIT_LED_ON;
-            /* fallthrough */
-        case INIT_LED_ON:
-            t0 = t1;
-            io_write(IO_PIN_LED, IO_PIN_LED_ON);
-            state = STATE_LED_ON;
+    case STATE_LED_OFF:
+        if (t1 < t0 + 9 * CLOCK_PER_SECOND / 10) {
             break;
-        case STATE_LED_ON:
-            if (t1 < t0 + 1 * CLOCK_PER_SECOND / 10) {
-                break;
-            }
-            state = INIT_LED_OFF;
-            /* fallthrough */
-        case INIT_LED_OFF:
-            t0 = t1;
-            io_write(IO_PIN_LED, IO_PIN_LED_OFF);
-            state = STATE_LED_OFF;
+        }
+        state = INIT_LED_ON;
+    /* fallthrough */
+    case INIT_LED_ON:
+        t0 = t1;
+        io_write(IO_PIN_LED, IO_PIN_LED_ON);
+        state = STATE_LED_ON;
+        break;
+    case STATE_LED_ON:
+        if (t1 < t0 + 1 * CLOCK_PER_SECOND / 10) {
             break;
+        }
+        state = INIT_LED_OFF;
+    /* fallthrough */
+    case INIT_LED_OFF:
+        t0 = t1;
+        io_write(IO_PIN_LED, IO_PIN_LED_OFF);
+        state = STATE_LED_OFF;
+        break;
     }
 }
 

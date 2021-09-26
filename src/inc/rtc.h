@@ -10,4 +10,4 @@ void rtc_set_alarm(uint32_t val);
 
 extern volatile int s_rtc_alarm;
 
-#endif 
+#endif

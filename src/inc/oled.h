@@ -7,6 +7,6 @@
 
 void oled_start(int rotate);
 void oled_clear_display(void);
-void oled_set_pixel(int x, int y, int c);
+void oled_set_pixel(int x, int y, int c, int update_now);
 
-#endif 
+#endif

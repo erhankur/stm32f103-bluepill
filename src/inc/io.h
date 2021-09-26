@@ -32,8 +32,8 @@ typedef struct {
 #define IO_PIN_LED_ON       0
 #define IO_PIN_LED_OFF      1
 
-#define IO_OLED_RES 
-#define IO_OLED_CS 
+#define IO_OLED_RES
+#define IO_OLED_CS
 
 enum {
     IO_PIN_LED,
@@ -74,16 +74,16 @@ GPIO_TypeDef *gpio_ports[] = {
 };
 
 io_pin_t io_pins[IO_PIN_MAX] = {
-    {.port = IO_PORT_C, .pin = 13}, 
+    {.port = IO_PORT_C, .pin = 13},
 
     /* SPI1 */
     {.port = IO_PORT_A, .pin = 5},  /* SCK */
     {.port = IO_PORT_A, .pin = 6},  /* MISO */
     {.port = IO_PORT_A, .pin = 7},  /* MOSI */
- 
+
     /* OLED */
 #ifdef IO_OLED_VDD
-#endif 
+#endif
 #ifdef IO_OLED_GND
 #endif
 #ifdef IO_OLED_RES
@@ -91,7 +91,7 @@ io_pin_t io_pins[IO_PIN_MAX] = {
 #endif
 #ifdef IO_OLED_CS
     {.port = IO_PORT_A, .pin = 4},  /* CS */
-#endif 
+#endif
     {.port = IO_PORT_B, .pin = 1},  /* DC */
 };
 #endif

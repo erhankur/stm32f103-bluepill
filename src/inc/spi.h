@@ -3,7 +3,13 @@
 
 #include <stdint.h>
 
-void spi_init(void);
-uint8_t spi_data(uint8_t val);
+void hw_spi_init(void);
+uint8_t hw_spi_data(uint8_t val);
 
-#endif 
+void sw_spi_init(void);
+uint8_t sw_spi_data(uint8_t val);
+
+#define SPI_INIT    sw_spi_init
+#define SPI_DATA    sw_spi_data
+
+#endif

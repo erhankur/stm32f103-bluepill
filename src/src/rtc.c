@@ -14,11 +14,11 @@ volatile int s_time = 0;
 
 void rtc_irq_config(void)
 {
-    /* rtc second */ 
+    /* rtc second */
     RTC_ClearITPendingBit(RTC_IT_SEC);
     RTC_ITConfig(RTC_IT_SEC, ENABLE);
-    
-    /* rtc alarm */ 
+
+    /* rtc alarm */
     RTC_ClearITPendingBit(RTC_IT_ALR);
     RTC_ITConfig(RTC_IT_ALR, ENABLE);
 
@@ -36,8 +36,8 @@ void rtc_init(void)
 
     if (BKP_ReadBackupRegister(BKP_DR1) != RTC_INIT_CONSTANT) {
         BKP_DeInit();
-        /* LSE init => run low speed external oscilator 32.768khz 
-            Why LSE ? 
+        /* LSE init => run low speed external oscilator 32.768khz
+            Why LSE ?
                 it is connected to backup domain and easy to calculatate 1 second with 32.768khz
         */
         RCC_LSEConfig(RCC_LSE_ON);
@@ -68,7 +68,7 @@ void rtc_set_counter(uint32_t val)
 }
 
 void rtc_set_alarm(uint32_t val)
-{ 
+{
     RTC_SetAlarm(val - 1);
 }
 
@@ -82,5 +82,5 @@ void RTC_IRQHandler(void)
         RTC_ClearITPendingBit(RTC_IT_ALR);
     } else if (RTC_GetITStatus(RTC_IT_OW) == SET) {
         RTC_ClearITPendingBit(RTC_IT_OW);
-    } 
+    }
 }
