@@ -58,6 +58,16 @@ enum {
 #endif
     IO_PIN_OLED_DC,
 
+    /* Matrix Keyboard */
+    IO_PIN_KEY_ROW0,
+    IO_PIN_KEY_ROW1,
+    IO_PIN_KEY_ROW2,
+    IO_PIN_KEY_ROW3,
+    IO_PIN_KEY_COL0,
+    IO_PIN_KEY_COL1,
+    IO_PIN_KEY_COL2,
+    IO_PIN_KEY_COL3,
+
     IO_PIN_MAX
 };
 
@@ -92,7 +102,19 @@ io_pin_t io_pins[IO_PIN_MAX] = {
 #ifdef IO_OLED_CS
     {.port = IO_PORT_A, .pin = 4},  /* CS */
 #endif
-    {.port = IO_PORT_B, .pin = 1},  /* DC */
+    {.port = IO_PORT_A, .pin = 8},  /* DC */
+
+    /* Matrix Keyboard */
+    {.port = IO_PORT_B, .pin = 0},  /* ROW0 */
+    {.port = IO_PORT_B, .pin = 1},  /* ROW1 */
+    {.port = IO_PORT_B, .pin = 10}, /* ROW2 */
+    {.port = IO_PORT_B, .pin = 11}, /* ROW3 */
+
+    {.port = IO_PORT_A, .pin = 4},  /* COL0 */
+    {.port = IO_PORT_A, .pin = 5},  /* COL1 */
+    {.port = IO_PORT_A, .pin = 6},  /* COL2 */
+    {.port = IO_PORT_A, .pin = 7},  /* COL3 */
+
 };
 #endif
 
