@@ -74,9 +74,7 @@ unsigned char uart_recv(int idx)
 
 void uart_send_buffer(int idx, const uint8_t *buffer, size_t len)
 {
-    //xSemaphoreTake(s_uart2_mutex, portMAX_DELAY);
     for (size_t i = 0; i < len; i++) {
         uart_send(idx, buffer[i]);
     }
-    //xSemaphoreGive(s_uart2_mutex);
 }

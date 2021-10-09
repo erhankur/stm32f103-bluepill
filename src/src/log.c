@@ -4,6 +4,7 @@
 #include <stdbool.h>
 #include "freertos/FreeRTOS.h"
 #include "freertos/task.h"
+#include "freertos/semphr.h"
 #include "system.h"
 #include "lwprintf.h"
 #include "log.h"
@@ -15,11 +16,38 @@ static const char *const s_level_str[] = { "OFF", "ERROR", "WARN", "INFO", "DEBU
 static char s_log_buffer[1024] = {0};
 static int s_log_uart = UART_3;
 
+static SemaphoreHandle_t s_log_mutex = NULL;
+#define MAX_MUTEX_WAIT_MS 10
+#define MAX_MUTEX_WAIT_TICKS ((MAX_MUTEX_WAIT_MS + portTICK_PERIOD_MS - 1) / portTICK_PERIOD_MS)
+
+bool log_lock_timeout(void)
+{
+    if (!s_log_mutex) {
+        s_log_mutex = xSemaphoreCreateMutex();
+    }
+    if (xTaskGetSchedulerState() == taskSCHEDULER_NOT_STARTED) {
+        return true;
+    }
+    return xSemaphoreTake(s_log_mutex, MAX_MUTEX_WAIT_TICKS) == pdTRUE;
+}
+
+void log_unlock(void)
+{
+    if (xTaskGetSchedulerState() == taskSCHEDULER_NOT_STARTED) {
+        return;
+    }
+    xSemaphoreGive(s_log_mutex);
+}
+
 static void log_writev(log_level_t level, const char *str)
 {
+    if (!log_lock_timeout()) {
+        return;
+    }
     if (s_log_level >= level) {
         uart_send_buffer(s_log_uart, (uint8_t *)str, strlen(str));
     }
+    log_unlock();
 }
 
 static void log_init(void)
@@ -44,6 +72,10 @@ void log_level_init(const char *tag, log_level_t level)
 {
     static bool first = true;
 
+    if (!log_lock_timeout()) {
+        return;
+    }
+
     s_log_level = level;
     if (s_log_level == LOG_LEVEL_OFF) {
         return;
@@ -57,6 +89,8 @@ void log_level_init(const char *tag, log_level_t level)
     if (tag) {
         strcpy(s_tag, tag);
     }
+
+    log_unlock();
 }
 
 void log_hex_dump(log_level_t level, const char *caption, void *buf, size_t buf_size)
