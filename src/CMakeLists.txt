@@ -7,8 +7,12 @@ set(sources
     src/delay.s
     src/spi.c
     src/oled.c
+    #src/oled_buffered.c
     src/keyboard.c
     src/fifo.c
+    src/i2c.c
+    src/i2c_soft.c
+    src/e24.c
 )
 
 # GCC optimization level: use -O0 in debug build, otherwise -O2

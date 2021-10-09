@@ -68,6 +68,11 @@ static uint8_t s_frame_buff[N_PAGES * N_SEGMENT];
 
 #define PI      3.141593654
 
+//todo
+/*
+begin, add, end commands
+*/
+
 void oled_send_cmd(uint8_t cmd)
 {
     io_write(IO_PIN_OLED_DC, 0);

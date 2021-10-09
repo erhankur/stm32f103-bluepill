@@ -4,6 +4,7 @@
 #include "stm32f10x_spi.h"
 #include "system.h"
 #include "io.h"
+#include "spi.h"
 
 #define HW_SPI_PORT        SPI1
 

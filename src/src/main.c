@@ -53,11 +53,51 @@ void task_led(void)
     }
 }
 
+void display_unique_id(void)
+{
+    const uint32_t *pID = (const uint32_t *)0x1FFFF7E8;
+
+    printf("%08lX\n", pID[2]);
+    printf("%08lX\n", pID[1]);
+    printf("%08lX\n", pID[0]);
+}
+
+void task_print(void)
+{
+    static unsigned count = 0;
+    int row, col;
+
+    oled_get_cursor(&row, &col);
+    oled_get_cursor(0, 0);
+    printf("CNT:%10u", ++count);
+    oled_set_cursor(row, col);
+}
+
+void task_display_clock(void)
+{
+  static clock_t t0, t1;
+  int row, col;
+  
+  t1 = sys_get_tick_count();
+  
+  if (t1 != t0) {
+    oled_get_cursor(&row, &col);
+    oled_get_cursor(0, 0);
+    printf("Clock:%10lu\r", t1);
+    oled_set_cursor(row, col);
+    t0 = t1;
+  }
+}
+
 int main()
 {
     init();
 
+    display_unique_id();
+
     while (1) {
         task_led();
+        task_display_clock();
+        task_print();
     }
 }
