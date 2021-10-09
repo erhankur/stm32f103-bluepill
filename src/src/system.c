@@ -25,5 +25,10 @@ void sys_io_init(void)
     GPIO_PinRemapConfig(GPIO_Remap_SWJ_JTAGDisable, ENABLE);
 }
 
+void sys_reset(void)
+{
+    NVIC_SystemReset();
+}
+
 
 

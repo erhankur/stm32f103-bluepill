@@ -41,6 +41,10 @@ typedef struct {
 enum {
     IO_PIN_LED,
 
+    /* UART pins */
+    IO_PIN_UART3_RX,
+    IO_PIN_UART3_TX,
+
     /* I2C */
     IO_PIN_I2C1_SCL,
     IO_PIN_I2C1_SDA,
@@ -89,6 +93,9 @@ GPIO_TypeDef *gpio_ports[] = {
 
 io_pin_t io_pins[IO_PIN_MAX] = {
     {.port = IO_PORT_C, .pin = 13},  /* LED */
+
+    {.port = IO_PORT_B, .pin = 11},  /* UART3_RX */
+    {.port = IO_PORT_B, .pin = 10},  /* UART3_TX */
 
     /* I2C */
     {.port = IO_PORT_B, .pin = 6},   /* I2C1_SCL */
