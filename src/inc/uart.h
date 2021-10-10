@@ -6,8 +6,8 @@
 
 enum {
     UART_1,
-	UART_2,
-	UART_3
+    UART_2,
+    UART_3
 };
 
 void uart_init(int idx, int baud);

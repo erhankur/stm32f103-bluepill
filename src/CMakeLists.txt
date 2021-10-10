@@ -7,6 +7,12 @@ set(sources
     src/uart.c
     src/log.c
     src/lwprintf.c
+    src/kb.c
+    src/delay.s
+    src/i2c.c
+    src/oled.c
+    src/rtc.c
+    src/button.c
 )
 
 # GCC optimization level: use -O0 in debug build, otherwise -O2
@@ -42,7 +48,7 @@ target_link_libraries(${elf_file} PRIVATE ${additional_linker_flags})
 target_link_libraries(${elf_file} PUBLIC "-g -Wl,--gc-sections")
 
 # link with linker file
-target_link_libraries(${elf_file} PUBLIC -T${LINKER_SCRIPT})
+target_link_libraries(${elf_file} PUBLIC -T${LINKER_SCRIPT} m)
 
 target_link_options(${elf_file} PRIVATE
   LINKER:--print-memory-usage

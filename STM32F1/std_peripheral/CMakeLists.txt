@@ -1,7 +1,7 @@
 set(sources
     src/misc.c
     #src/stm32f10x_adc.c
-    #src/stm32f10x_bkp.c
+    src/stm32f10x_bkp.c
     #src/stm32f10x_can.c
     #src/stm32f10x_cec.c
     #src/stm32f10x_crc.c
@@ -12,7 +12,8 @@ set(sources
     src/stm32f10x_flash.c
     #src/stm32f10x_fsmc.c
     src/stm32f10x_gpio.c
-    #src/stm32f10x_i2c.c
+    src/stm32f10x_i2c.c
+    src/stm32f10x_pwr.c
     src/stm32f10x_rcc.c
     src/stm32f10x_rtc.c
     #src/stm32f10x_sdio.c
